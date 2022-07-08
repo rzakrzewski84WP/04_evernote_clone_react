@@ -3,7 +3,15 @@
 import './App.css';
 import React, { Component } from 'react';
 import firebase from './Components/Helpers/firebaseConfig';
-import { collection, getDocs, onSnapshot, query } from 'firebase/firestore';
+import {
+	collection,
+	getDocs,
+	addDoc,
+	onSnapshot,
+	doc,
+	query,
+	where,
+} from 'firebase/firestore';
 
 import DocksData from './Components/DocksData';
 
@@ -15,35 +23,10 @@ class App extends Component {
 		this.state = {
 			selectedNodeIndex: null,
 			selectedNote: null,
-			notes: null,
+			notes: [],
 		};
 		this.componentDidMount = this.componentDidMount.bind(this);
-		this.watchFireStore = this.watchFireStore.bind(this);
 		// this.setState = this.setState.bind(this);
-	}
-
-	watchFireStore() {
-		const q = query(collection(db, 'notes'));
-		const unsubscribe = onSnapshot(q, async (collectionsUpdate) => {
-			console.log(collectionsUpdate);
-			const documents = await collectionsUpdate.docs.map((_doc) => {
-				const data = _doc.data();
-				data['id'] = _doc.id;
-				return data;
-			});
-			console.log('documents', documents);
-
-			console.log('this.state before setState', this.state);
-
-			this.setState(
-				{ notes: documents, selectedNote: true, selectedNodeIndex: true },
-				function () {
-					console.log('this.state in setState', this.state);
-				}
-			);
-
-			console.log('this.state after setState', this.state);
-		});
 	}
 
 	componentDidMount() {
@@ -57,7 +40,26 @@ class App extends Component {
 		};
 		//callback
 		getDocsFromFS();
-		this.watchFireStore();
+
+		const q = query(collection(db, 'notes'));
+		const unsubscribe = onSnapshot(q, (collectionsUpdate) => {
+			const notes = [];
+
+			console.log('before forEch');
+
+			collectionsUpdate.forEach((doc) => {
+				const data = doc.data();
+				data['id'] = doc.id;
+				notes.push(data);
+
+				console.log('in forEach', notes);
+			});
+
+			console.log('notes after pushing', notes);
+			return notes;
+		});
+		console.log('unsubsribe', unsubscribe);
+		this.setState({ notes: unsubscribe });
 	}
 
 	render() {
@@ -65,7 +67,7 @@ class App extends Component {
 			<div>
 				<h1>Hello Word</h1>
 				https://youtu.be/I250xdtUvy8?list=PLyDE36G6PL48BO1vQoJGbpyWiGCtU0iNY&t=1257
-				<DocksData notes={this.state} />
+				<DocksData notes={this.state.notes} />
 			</div>
 		);
 	}
