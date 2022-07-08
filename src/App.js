@@ -19,7 +19,7 @@ class App extends Component {
 		};
 		this.componentDidMount = this.componentDidMount.bind(this);
 		this.watchFireStore = this.watchFireStore.bind(this);
-		// this.setState = this.setState.bind(this);
+		this.setState = this.setState.bind(this);
 	}
 
 	watchFireStore() {
