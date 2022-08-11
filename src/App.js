@@ -65,7 +65,7 @@ class App extends Component {
 			<div>
 				<h1>Hello Word</h1>
 				https://youtu.be/I250xdtUvy8?list=PLyDE36G6PL48BO1vQoJGbpyWiGCtU0iNY&t=1257
-				<DocksData notes={this.state} />
+				{this.state.notes && <DocksData notes={this.state} />}
 			</div>
 		);
 	}
