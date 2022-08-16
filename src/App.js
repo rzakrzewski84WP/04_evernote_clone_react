@@ -47,16 +47,16 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		//getting documents from firestore once
-		const getDocsFromFS = async function () {
-			const querySnapshot = await getDocs(collection(db, 'notes'));
-			querySnapshot.forEach((doc) => {
-				const document = doc.data();
-				// console.log(`${doc.id} => ${document.title}, ${document.body}`);
-			});
-		};
-		//callback
-		getDocsFromFS();
+		// //getting documents from firestore once
+		// const getDocsFromFS = async function () {
+		// 	const querySnapshot = await getDocs(collection(db, 'notes'));
+		// 	querySnapshot.forEach((doc) => {
+		// 		const document = doc.data();
+		// 		// console.log(`${doc.id} => ${document.title}, ${document.body}`);
+		// 	});
+		// };
+		// //callback
+		// getDocsFromFS();
 		this.watchFireStore();
 	}
 
@@ -64,8 +64,7 @@ class App extends Component {
 		return (
 			<div>
 				<h1>Hello Word</h1>
-				https://youtu.be/I250xdtUvy8?list=PLyDE36G6PL48BO1vQoJGbpyWiGCtU0iNY&t=1257
-				{this.state.notes && <DocksData notes={this.state} />}
+				{this.state.notes && <DocksData notes={this.state.notes} />}
 			</div>
 		);
 	}
